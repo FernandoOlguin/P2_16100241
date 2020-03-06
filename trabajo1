@@ -1,0 +1,77 @@
+# Márgenes colapsables
+
+Al utilizar la propiedad margin en CSS hay que tener en cuenta que los márgenes verticales ( margin-top y margin-bottom ) pueden colapsar.  Un ejemplo sería una lista **ul** donde los elementos **li** aparecen uno debajo de otro. Supongamos que los elementos **li** tienen un margen declarado de margin:1em 1em .5em 1em;. En este caso la distancia entre Uno y Dos tendría que ser de 1.5em ( 0.5em para el margin-bottom de Uno más 1em para el margin-top de Dos ). Sin embargo la distancia entre Uno y Dos es de solo 1em. Esto pasa porque los márgenes verticales adyacentes colapsan y el margen mas pequeño es eliminado (el margin-bottom de Uno en este caso).
+
+    ul{
+     list-style:none;
+     list-style-position: inside;
+     outline:1px solid;
+     width: 200px; 
+     padding:.5em;
+    }
+
+    li{
+     padding:.5em;
+     outline: 1px solid;
+     margin:1em 1em .5em 1em;  
+    }
+
+Otro ejemplo sería un grupo de párrafos. En el ejemplo anterior el elemento contenedor (la lista **ul**) tiene padding padding:.5em;. Esto impide que el margen superior de Uno y el margen inferior de Listo  colapsen. A diferencia del ejemplo anterior el .envoltorio del siguiente ejemplo no tiene padding y las margenes del primer y del último párrafo están colapsadas a 0.
+
+
+
+    .envoltorio{
+      outline:1px solid;
+      /*border:1px solid;  */
+      /*padding:.01em;   */
+      /*float:left;*/
+      /*position:absolute;*/
+      /*position:fixed;*/
+      /*column-span:all;*/
+      /*display:inline-block;*/
+      /*display:table-cell*/
+      /*display:table-caption*/
+      /*display:flow-root;*/
+      /*overflow:auto;*/
+      /*
+     display:flex;
+     flex-direction:column;
+     */  
+      /*display:grid;*/  
+     }
+
+
+    p{
+      margin:1em;
+      padding:.5em; 
+      border:1px solid;
+  
+      /*display:inline-block;
+      width:100%;*/
+    }
+
+Si el elemento contenedor no tiene borde o no tiene padding el margen superior de Uno y el margen inferior de Listo  colapsen también. Para que sea claro que pasa en el siguiente ejemplo el .envoltorio tiene un outline.  En realidad los márgenes colapsados no desaparecen, siguen allá, y si abrimos el inspector podemos ver claramente que el margen superior del primer elemento sigue allá pero sale del contenedor. Lo mismo pasa con el último.
+
+En la siguiente imagen puede ver claramente como el margen ( anaranjado ) sigue allá pero sale del contenedor:
+
+![Texto alternativo](https://lh3.googleusercontent.com/MKSRGR82OMVH2eCr8EOsJEgcYJynvnWfthA1mRi-OeCDToQZefqfs3O9PiSDbF2Qlbj9=s158)
+
+## Prevenir que los márgenes colapsen
+Para prevenir que los márgenes exteriores colapsen podemos:
+
+* añadir un borde ( border ) al envoltorio
+* hacer que el envoltorio tenga padding.
+* flotar el envoltorio:  .envoltorio: {float:left;}
+* hacer que el envoltorio tenga position:absolute;  o position:fixed;
+* hacer que el envoltorio tenga column-span:all;
+* utilizar display:inline-block; o display:table-cell;  o display:table-caption; para el envoltorio
+* utilizar overflow:auto o cualquier otro valor excepto overflow:visible.   
+
+Todos estos métodos crean un Block Formating Context ( abreviado BFC ) en el cual los márgenes del primer y del último elemento del envoltorio no colapsan.
+
+Podemos conseguir lo mismo utilizando display:flow-rootstar con la precaución que display:flow-root no está todavía soportado en todos los navegadores.
+
+Para prevenir que ningún borde no colapse dentro del envoltorio podemos:
+
+* utilizar display: flex; flex-direction:column; o
+* utilizar display: grid;
